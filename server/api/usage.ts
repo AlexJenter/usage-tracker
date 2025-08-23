@@ -4,6 +4,8 @@ import fs from "fs";
 interface RowItem {
   date: string
   name: string
+  month: number
+  monthName: string
 }
 
 export default defineEventHandler((event) => {
@@ -20,7 +22,13 @@ export default defineEventHandler((event) => {
     const data = usageString
       .split("\n")
       .map((str) => str.split(" "))
-      .map(([date, ean]) => (<RowItem>{ date, name: productsData[ean] || "" }));
+      .map(([date, ean]) => (<RowItem>{
+        date,
+        month: new Date(date).getMonth(),
+        monthName: new Date(date).toLocaleString("default", { month: "long" }),
+        name: productsData[ean] || ""
+      }))
+      .reverse();
 
     return data
   } catch (err) {
