@@ -7,10 +7,30 @@ defineProps<{
 }>();
 
 const source = useTemplateRef("clip-source");
-const { text, copy, copied, isSupported } = useClipboard();
+const { copy, copied, text } = useClipboard();
 </script>
-<template v-if="searchTerm">
+
+<template>
   <hr />
-  <div ref="clip-source">{{ count }}&nbsp;&times;&nbsp;{{ term }}</div>
-  <button @click="copy(source?.innerText || '')">📋</button>
+  <div class="wrapper">
+    <template v-if="!copied">
+      <div ref="clip-source">{{ count }}&nbsp;&times;&nbsp;{{ term }}</div>
+      <button @click="copy(source?.innerText || '')">📋</button>
+    </template>
+    <template v-else>
+      <span>Copied {{ text }}</span>
+      <span>🖇️</span>
+    </template>
+  </div>
 </template>
+
+<style scoped lang="scss">
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+button {
+  all: unset;
+}
+</style>
