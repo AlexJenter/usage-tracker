@@ -1,5 +1,9 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, type VNodeRef } from "vue";
+
+const source = useTemplateRef("clip-source");
+const { text, copy, copied, isSupported } = useClipboard();
+
 import {
   ListboxContent,
   ListboxFilter,
@@ -9,6 +13,7 @@ import {
   ListboxItemIndicator,
 } from "reka-ui";
 import MonthPicker from "../components/monthPicker.vue";
+import { useClipboard } from "@vueuse/core";
 const { status, data } = await useFetch("/api/usage", { lazy: true });
 
 const selectedRow = ref(data[0]);
@@ -29,31 +34,40 @@ const resetFilter = () => {
 </script>
 
 <template>
-  <ListboxRoot
-    v-model="selectedRow"
-    @keydown.esc="resetFilter()"
-    highlightOnHover
-    class="ListboxRoot"
-  >
-    <ListboxFilter autofocus v-model="searchTerm" class="ListboxFilter" />
-    <MonthPicker
-      v-if="monthFilter !== -1"
-      :month="monthFilter"
-      @update="(e) => (monthFilter = e)"
-    />
-    <ListboxContent class="ListboxContent">
-      <ListboxItem
-        class="ListboxItem"
-        v-for="row in filteredRows"
-        :key="row.date + row.name"
-        :value="row"
-      >
-        <span>{{ row.date }}</span>
-        <span @click="monthFilter = row.month">{{ row.monthName }}</span>
-        <span @click="searchTerm = row.name">{{ row.name }}</span>
-      </ListboxItem>
-    </ListboxContent>
-  </ListboxRoot>
+  <div>
+    <ListboxRoot
+      v-model="selectedRow"
+      @keydown.esc="resetFilter()"
+      highlightOnHover
+      class="ListboxRoot"
+    >
+      <ListboxFilter autofocus v-model="searchTerm" class="ListboxFilter" />
+      <MonthPicker
+        v-if="monthFilter !== -1"
+        :month="monthFilter"
+        @update="(e) => (monthFilter = e)"
+      />
+      <ListboxContent class="ListboxContent">
+        <ListboxItem
+          class="ListboxItem"
+          v-for="row in filteredRows"
+          :key="row.date + row.name"
+          :value="row"
+        >
+          <span>{{ row.date }}</span>
+          <span @click="monthFilter = row.month">{{ row.monthName }}</span>
+          <span @click="searchTerm = row.name">{{ row.name || row.ean }}</span>
+        </ListboxItem>
+      </ListboxContent>
+    </ListboxRoot>
+    <template v-if="searchTerm">
+      <hr />
+      <div ref="clip-source">
+        {{ filteredRows?.length }}&nbsp;&times;&nbsp;{{ searchTerm }}
+      </div>
+      <button @click="copy(source?.innerText || '')">📋</button>
+    </template>
+  </div>
 </template>
 
 <style>

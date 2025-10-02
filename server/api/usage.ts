@@ -6,6 +6,7 @@ interface RowItem {
   name: string
   month: number
   monthName: string
+  ean: string
 }
 
 export default defineEventHandler((event) => {
@@ -26,7 +27,8 @@ export default defineEventHandler((event) => {
         date,
         month: new Date(date).getMonth(),
         monthName: new Date(date).toLocaleString("default", { month: "long" }),
-        name: productsData[ean] || ""
+        name: productsData[ean] || "",
+        ean
       }))
       .reverse();
 
