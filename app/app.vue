@@ -1,9 +1,6 @@
 <script setup lang="ts">
 import { ref, type VNodeRef } from "vue";
-
-const source = useTemplateRef("clip-source");
-const { text, copy, copied, isSupported } = useClipboard();
-
+import Clipboard from "../components/clipboard.vue";
 import {
   ListboxContent,
   ListboxFilter,
@@ -60,13 +57,12 @@ const resetFilter = () => {
         </ListboxItem>
       </ListboxContent>
     </ListboxRoot>
-    <template v-if="searchTerm">
-      <hr />
-      <div ref="clip-source">
-        {{ filteredRows?.length }}&nbsp;&times;&nbsp;{{ searchTerm }}
-      </div>
-      <button @click="copy(source?.innerText || '')">📋</button>
-    </template>
+
+    <Clipboard
+      v-if="searchTerm"
+      :count="filteredRows?.length"
+      :term="searchTerm"
+    ></Clipboard>
   </div>
 </template>
 
