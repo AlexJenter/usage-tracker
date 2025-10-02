@@ -1,48 +1,53 @@
 <script setup lang="ts">
-import { ref, type VNodeRef } from "vue";
-import Clippy from "../components/Clippy.vue";
+import { onKeyStroke } from "@vueuse/core";
 import {
   ListboxContent,
   ListboxFilter,
   ListboxItem,
   ListboxRoot,
   useFilter,
-  ListboxItemIndicator,
 } from "reka-ui";
-import MonthPicker from "../components/monthPicker.vue";
+import {
+  dec as decMonthIndex,
+  inc as incMonthIndex,
+  index as monthIndex,
+  set as setMonthIndex,
+} from "~/composables/useMonthStore";
+import Clippy from "../components/Clippy.vue";
+import MonthPicker from "../components/MonthPicker.vue";
 
 const { status, data } = await useFetch("/api/usage", { lazy: true });
 const selectedRow = ref(data[0]);
 const searchTerm = ref("");
-const monthFilter = ref(-1);
+
 const { contains } = useFilter({ sensitivity: "base" });
 
 const filteredRows = computed(() =>
   data.value
-    ?.filter((p) => monthFilter.value === -1 || p.month === monthFilter.value)
+    ?.filter((p) => monthIndex.value === -1 || p.month === monthIndex.value)
     ?.filter((p) => contains(p.name, searchTerm.value))
 );
 
 const resetFilter = () => {
   searchTerm.value = "";
-  monthFilter.value = -1;
+  setMonthIndex(-1);
 };
+
+onKeyStroke("Escape", resetFilter);
+onKeyStroke("ArrowLeft", decMonthIndex);
+onKeyStroke("ArrowRight", incMonthIndex);
 </script>
 
 <template>
   <div>
-    <ListboxRoot
-      v-model="selectedRow"
-      @keydown.esc="resetFilter()"
-      highlightOnHover
-      class="ListboxRoot"
-    >
-      <ListboxFilter autofocus v-model="searchTerm" class="ListboxFilter" />
-      <MonthPicker
-        v-if="monthFilter !== -1"
-        :month="monthFilter"
-        @update="(e) => (monthFilter = e)"
+    <ListboxRoot v-model="selectedRow" class="ListboxRoot">
+      <ListboxFilter
+        autofocus
+        ref="searchInput"
+        v-model="searchTerm"
+        class="ListboxFilter"
       />
+      <MonthPicker ref="mPicker" />
       <ListboxContent class="ListboxContent">
         <ListboxItem
           class="ListboxItem"
@@ -51,7 +56,7 @@ const resetFilter = () => {
           :value="row"
         >
           <span>{{ row.date }}</span>
-          <span @click="monthFilter = row.month">{{ row.monthName }}</span>
+          <span @click="setMonthIndex(row.month)">{{ row.monthName }}</span>
           <span @click="searchTerm = row.name">{{ row.name || row.ean }}</span>
         </ListboxItem>
       </ListboxContent>
