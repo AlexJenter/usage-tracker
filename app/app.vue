@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, type VNodeRef } from "vue";
-import Clipboard from "../components/clipboard.vue";
+import Clippy from "../components/Clippy.vue";
 import {
   ListboxContent,
   ListboxFilter,
@@ -10,9 +10,8 @@ import {
   ListboxItemIndicator,
 } from "reka-ui";
 import MonthPicker from "../components/monthPicker.vue";
-import { useClipboard } from "@vueuse/core";
-const { status, data } = await useFetch("/api/usage", { lazy: true });
 
+const { status, data } = await useFetch("/api/usage", { lazy: true });
 const selectedRow = ref(data[0]);
 const searchTerm = ref("");
 const monthFilter = ref(-1);
@@ -58,11 +57,11 @@ const resetFilter = () => {
       </ListboxContent>
     </ListboxRoot>
 
-    <Clipboard
+    <Clippy
       v-if="searchTerm"
       :count="filteredRows?.length"
       :term="searchTerm"
-    ></Clipboard>
+    ></Clippy>
   </div>
 </template>
 

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useClipboard } from "@vueuse/core";
+import { useTemplateRef } from "vue";
 
 defineProps<{
   term: string;
