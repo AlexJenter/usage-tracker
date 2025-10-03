@@ -2,6 +2,7 @@ import fs from 'fs';
 
 export default defineEventHandler((event) => {
     if (
+        false &&
         !event.headers.hasOwnProperty('x-auphentikate') &&
         event.headers.get('x-auphentikate') !== 'lala-l'
     ) {
