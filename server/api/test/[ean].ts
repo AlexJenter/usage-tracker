@@ -1,6 +1,12 @@
 import fs from 'fs';
 
 export default defineEventHandler((event) => {
+    if (
+        !event.headers.hasOwnProperty('x-auphentikate') &&
+        event.headers.get('x-auphentikate') !== 'lala-l'
+    ) {
+        return { status: "403 Forbidden", msg: "access denied" }
+    }
 
     const ean = getRouterParam(event, 'ean')
     const date = new Date().toISOString().split("T")[0];
@@ -16,9 +22,9 @@ export default defineEventHandler((event) => {
 
     let response
     if (productsData.hasOwnProperty(ean)) {
-        response = { status: "found", msg: `product: ${productsData[ean]}` }
+        response = { status: "200 OK", msg: `product: ${productsData[ean!]}` }
     } else {
-        response = { status: "unknown", msg: 'unknown product', ean }
+        response = { status: "404 Not Found", msg: 'unknown product', ean }
     }
 
     return response
