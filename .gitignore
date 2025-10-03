@@ -6,6 +6,8 @@
 .cache
 dist
 
+storage
+
 # Node dependencies
 node_modules
 
