@@ -1,8 +1,10 @@
 import fs from 'fs';
 
 export default defineEventHandler((event) => {
+    const config = useRuntimeConfig(event)
+
     if (
-        false &&
+        !config.apiDebug &&
         !event.headers.hasOwnProperty('x-auphentikate') &&
         event.headers.get('x-auphentikate') !== 'lala-l'
     ) {

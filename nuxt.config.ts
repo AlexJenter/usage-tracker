@@ -5,6 +5,9 @@ export default defineNuxtConfig({
   modules: [
     'reka-ui/nuxt',
   ],
+  runtimeConfig: {
+    apiDebug: false,
+  },
   app: {
     head: {
       link: [{ rel: 'icon', type: "image/x-icon", href: 'https://fav.farm/📦' }]
