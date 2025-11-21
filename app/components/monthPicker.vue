@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { store } from "../composables/useMonthStore.js";
+import { index, inc, dec, name } from "~/composables/useMonthStore";
 </script>
 
 <template>
   <div class="MonthPicker">
-    <button @click="store.decrement()">-</button>
-    <span>{{ store.name() }}</span>
-    <button @click="store.increment()">+</button>
+    <button @click="dec()">-</button>
+    <span>{{ name }}</span>
+    <button @click="inc()">+</button>
   </div>
 </template>
 
