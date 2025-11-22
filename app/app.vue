@@ -14,7 +14,14 @@ import {
     set as setMonthIndex,
 } from "~/composables/useMonthStore";
 
-const { status, data } = await useFetch("/api/usage", { lazy: true });
+const config = useRuntimeConfig();
+
+const { status, data } = await useFetch("/api/usage", {
+    lazy: true,
+    headers: {
+        "x-api-key": config.apiKey,
+    },
+});
 const selectedRow = ref(data[0]);
 const searchTerm = ref("");
 
