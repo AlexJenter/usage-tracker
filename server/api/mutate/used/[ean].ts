@@ -1,3 +1,4 @@
+// server/api/used/[ean].ts
 import fs from "fs";
 
 export default defineEventHandler((event) => {

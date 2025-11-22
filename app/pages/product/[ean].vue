@@ -1,3 +1,4 @@
+<!-- app/pages/product/[ean].vue -->
 <script setup lang="ts">
 const config = useRuntimeConfig();
 

@@ -1,3 +1,4 @@
+<!-- app/pages/index.vue -->
 <script setup lang="ts">
 import { onKeyStroke } from "@vueuse/core";
 
@@ -16,12 +17,7 @@ import {
     set as setMonthIndex,
 } from "~/composables/useMonthStore";
 
-const config = useRuntimeConfig();
-
-const { data } = await useFetch("/api/usage", {
-    lazy: true,
-    headers: { "x-api-key": config.apiKey },
-});
+const { data } = await useFetch("/api/usage", { lazy: true });
 const selectedRow = ref();
 const searchTerm = ref("");
 

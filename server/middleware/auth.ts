@@ -2,8 +2,9 @@
 import { defineEventHandler, getHeader, sendError, createError } from "h3";
 
 export default defineEventHandler((event) => {
-  // Only protect certain paths
-  if (!event.path.startsWith("/api")) return;
+  const url = getRequestURL(event);
+  const path = url.pathname;
+  if (!path.startsWith("/api/mutate")) return;
 
   const expected = process.env.API_KEY;
   const provided =
@@ -16,6 +17,7 @@ export default defineEventHandler((event) => {
       createError({
         statusCode: 401,
         statusMessage: "Unauthorized",
+        message: "Missing or invalid API key",
       }),
     );
   }
