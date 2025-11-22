@@ -3,7 +3,7 @@ import { defineEventHandler, getHeader, sendError, createError } from "h3";
 
 export default defineEventHandler((event) => {
   // Only protect certain paths
-  if (!event.path.startsWith("/api/private")) return;
+  if (!event.path.startsWith("/api")) return;
 
   const expected = process.env.API_KEY;
   const provided =
