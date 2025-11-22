@@ -2,8 +2,6 @@
 import fs from "fs";
 
 export default defineEventHandler((event) => {
-  
-  
   const ean = <string>getRouterParam(event, "ean");
   if (!ean) return;
 
