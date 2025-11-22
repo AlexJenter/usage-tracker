@@ -13,6 +13,7 @@ export default defineEventHandler(async (event) => {
   const directory = process.env.PERSISTENT_STORAGE_DIRECTORY || "./storage";
 
   const [date] = new Date().toISOString().split("T");
+  console.log(date);
 
   return {
     ok: true,
